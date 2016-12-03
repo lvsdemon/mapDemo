@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>mapDemo</title>
+<!-- 引入css文件 -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.2/dist/leaflet.css" />
+<!-- 引入JavaScript -->
+<script src="https://unpkg.com/leaflet@1.0.2/dist/leaflet.js"></script>
+<!-- 设置样式 -->
+<style type="text/css">
+	#mapId{
+		height:600px;
+	}
+</style>
+</head>
+<body>
+	<!-- 创建div加载地图 -->
+	<div id="mapId"></div>
+	<script type="text/javascript">
+	//初始化，设置地图中心和缩放级别
+	var mymap = L.map('mapId').setView([39.90729, 116.39122], 13);
+	//加载图层
+	L.tileLayer('http://map.zhtu.net:8080/r3t-basemap/{z}/{x}/{y}/tile.jpg?access_token={accessToken}', {
+		attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
+		maxZoom:18,
+		id: 'your.mapbox.project.id',
+		accessToken: 'your.mapbox.public.access.token'
+	}).addTo(mymap);
+  //添加天安门标注
+	L.marker([39.90729, 116.39122]).addTo(mymap).bindPopup("<b>天安门</b>").openPopup();
+	//取消双击自动放大
+	mymap.doubleClickZoom.disable();
+	//双击放置注记
+	function onClick(e){
+		var marker = L.marker(e.latlng).addTo(mymap);
+		marker.bindPopup("You clicked the map at " + e.latlng).openPopup();
+	}
+	mymap.on('dblclick', onClick);
+	//添加比例尺
+	var scal = L.control.scale({
+		position:'topright'
+	});
+	mymap.addControl(scal);
+</script>
+</body>
+</html>
